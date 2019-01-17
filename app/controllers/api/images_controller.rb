@@ -3,9 +3,15 @@ class Api::ImagesController < ApplicationController
 
   # GET /images
   def index
-    @images = Image.all
-
-    render json: @images
+    puts params
+    if params[:search].present? && Image.where(download: params[:search]).exists?
+      @image = Image.where(download: params[:search])
+      puts @image
+      render json: @image
+    else
+      @images = Image.all
+      render json: @images
+    end    
   end
 
   # GET /images/1
@@ -18,7 +24,7 @@ class Api::ImagesController < ApplicationController
     @image = Image.new(image_params)
 
     if @image.save
-      render json: @image, status: :created, location: @image
+      render json: @image, status: :created
     else
       render json: @image.errors, status: :unprocessable_entity
     end
@@ -46,6 +52,6 @@ class Api::ImagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:link, :brand, :photographer, :profile, :download, :download_count)
+      params.require(:image).permit(:link, :brand, :photographer, :profile, :download, :download_count, :search)
     end
 end
