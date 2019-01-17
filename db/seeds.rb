@@ -5,3 +5,4 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+Image.create(link: 'https://unsplash.com/', brand: 'Unsplash', photographer: 'Jeff Sheldon', profile: 'http://ugmonk.com/', download: 'http://unsplash.com/photos/eOLpJytrbsQ/download', download_count: 0)
