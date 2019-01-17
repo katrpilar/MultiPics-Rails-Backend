@@ -4,10 +4,14 @@ class Api::ImagesController < ApplicationController
   # GET /images
   def index
     puts params
-    if params[:search].present? && Image.where(download: params[:search]).exists?
-      @image = Image.where(download: params[:search])
-      puts @image
-      render json: @image
+    if params[:search].present?
+      if Image.where(download: params[:search]).exists?
+        @image = Image.where(download: params[:search])
+        puts @image
+        render json: @image
+      else
+        render json: { :message => "not found"}
+      end
     else
       @images = Image.all
       render json: @images
