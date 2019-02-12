@@ -1,5 +1,13 @@
+require 'faraday'
 class Api::ImagesController < ApplicationController
   before_action :set_image, only: [:show, :update, :destroy]
+
+
+  ## GET search results from external APIs of Unsplash, Pexels, and Pixabay
+  # Return a JSON object containing the Array of Photos
+  def external
+    render json: {:route => "working"}
+  end
 
   # GET /images
   def index
