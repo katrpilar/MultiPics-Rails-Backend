@@ -1,20 +1,29 @@
 require 'faraday'
 class Api::ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :update, :destroy]
+  # before_action :set_image, only: [:show, :update, :destroy]
 
 
-  ## GET search results from external APIs of Unsplash, Pexels, and Pixabay
-  # Return a JSON object containing the Array of Photos
-  def external
-    render json: {:route => "working"}
-  end
+  # ## GET search results from external APIs of Unsplash, Pexels, and Pixabay
+  # # Return a JSON object containing the Array of Photos
+  # def external
+  #   url = `https://api.unsplash.com/search/photos?client_id=#{UNSPLASH_ACCESS_KEY}&page=#{1}&query=#{husky}&per_page=10`
+
+  # conn = Faraday.new(url: url) do |faraday|
+  #   faraday.adapter Faraday.default_adapter
+  #   faraday.response :json
+  # end
+
+  # response = conn.get('search', type: 'artist', q: 'tycho')
+  # response.body
+  # render json: {:route => "working"}
+  # end
 
   # GET /images
   def index
     puts params
     if params[:search].present?
-      if Image.where(download: params[:search]).exists?
-        @image = Image.where(download: params[:search])
+      if Image.where(src: params[:search]).exists?
+        @image = Image.where(src: params[:search])
         puts @image
         render json: @image
       else
@@ -64,6 +73,6 @@ class Api::ImagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:link, :brand, :photographer, :profile, :download, :download_count, :search)
+      params.require(:image).permit(:height, :key, :metadata, :width, :src, :download_count)
     end
 end
