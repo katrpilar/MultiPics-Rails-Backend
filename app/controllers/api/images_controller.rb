@@ -1,6 +1,9 @@
 require 'faraday'
+require 'json'
+require 'pry'
+
 class Api::ImagesController < ApplicationController
-  # before_action :set_image, only: [:show, :update, :destroy]
+  before_action :set_image, only: [:show, :update, :destroy]
 
 
   # ## GET search results from external APIs of Unsplash, Pexels, and Pixabay
@@ -22,8 +25,10 @@ class Api::ImagesController < ApplicationController
   def index
     puts params
     if params[:search].present?
-      if Image.where(src: params[:search]).exists?
-        @image = Image.where(src: params[:search])
+      # meta = params[:search]
+
+      if Image.where(download_url: params[:search]).exists?
+        @image = Image.where(download_url: params[:search])
         puts @image
         render json: @image
       else
@@ -43,6 +48,7 @@ class Api::ImagesController < ApplicationController
   # POST /images
   def create
     @image = Image.new(image_params)
+    # @image.metadata = params[:image][:metadata].to_json
 
     if @image.save
       render json: @image, status: :created
@@ -73,6 +79,6 @@ class Api::ImagesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def image_params
-      params.require(:image).permit(:height, :key, :metadata, :width, :src, :download_count)
+      params.require(:image).permit(:height, :key, :metadata, :width, :src, :download_count, :search, :download_url, :id)
     end
 end
